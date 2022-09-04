@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:elevation="7dp"
+    android:fadingEdge="horizontal">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/id"
+        android:id="@+id/idIcon"/>
+
+    <ImageView
+        android:id="@+id/sensorIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/idIcon"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/sensor" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/time"
+        android:layout_below="@+id/sensorIcon"
+        android:layout_marginTop="10dp"
+        android:id="@+id/timeIcon"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ID"
+        android:id="@+id/txtId"
+        android:layout_toEndOf="@+id/idIcon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="10dp"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/txtSensor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sensorIcon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="-24dp"
+        android:layout_toEndOf="@+id/sensorIcon"
+        android:text="Sensor"
+        android:textSize="18sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtSensor"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="9dp"
+        android:layout_toEndOf="@+id/timeIcon"
+        android:text="CreatedAt"
+        android:id="@+id/txtCreatedAt"
+        android:textSize="18sp" />
+
+</RelativeLayout>
