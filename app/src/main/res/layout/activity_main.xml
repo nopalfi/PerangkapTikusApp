@@ -12,7 +12,7 @@
         android:layout_height="150dp"
         android:layout_marginTop="200dp"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/logo_ulm" />
+        android:src="@drawable/himaprotektan" />
 <Button
     android:layout_width="200dp"
     android:layout_height="wrap_content"

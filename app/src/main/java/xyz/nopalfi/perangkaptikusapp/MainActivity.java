@@ -16,6 +16,14 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     Button btn2;
     Button btn3;
 
-    final String URL = "https://perangkap-tikus.herokuapp.com/api/v1/tikus/";
+    String url = "https://perangkap-tikus.herokuapp.com/api/v1/tikus/";
     String jsonString = "";
     ArrayList<Tikus> tikus = new ArrayList<>();
     RecyclerView recyclerView;
@@ -50,8 +58,32 @@ public class MainActivity extends AppCompatActivity {
         btn1 = findViewById(R.id.btn1);
         btn2 = findViewById(R.id.btn2);
         btn3 = findViewById(R.id.btn3);
-        new FetchData().start();
 
+        RequestQueue queue = Volley.newRequestQueue(this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    for (int i = 0; i<response.length(); i++) {
+                        JSONObject object = response.getJSONObject(i);
+                        Long id = object.getLong("id");
+                        String sensor = object.getString("sensor");
+                        String createdAt = object.getString("createdAt");
+                        ZonedDateTime zonedDateTime = ZonedDateTime.parse(createdAt);
+                        tikus.add(new Tikus(id, sensor, zonedDateTime));
+                    }
+                    System.out.println(tikus.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        queue.add(jsonArrayRequest);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.hide();
@@ -73,41 +105,6 @@ public class MainActivity extends AppCompatActivity {
         btn3.setOnClickListener(view -> {
             Toast.makeText(this, "Fitur Belum Ready!", Toast.LENGTH_SHORT).show();
         });
-
-
     }
-    class FetchData extends Thread {
-        @Override
-        public void run() {
-            try {
-                URL url = new URL(URL);
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                InputStreamReader inputStreamReader = new InputStreamReader(httpURLConnection.getInputStream());
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                String line = "";
-                while ((line = bufferedReader.readLine()) != null) {
-                    jsonString = line;
-                }
-                if (!jsonString.isEmpty()) {
 
-                    try {
-                        JSONArray jsonArray = new JSONArray(jsonString);
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            Long id = jsonObject.getLong("id");
-                            String sensor = jsonObject.getString("sensor");
-                            String createdAt = jsonObject.getString("createdAt");
-                            ZonedDateTime createdAtZoned = ZonedDateTime.parse(createdAt);
-                            Tikus addTikus = new Tikus(id, sensor, createdAtZoned);
-                            tikus.add(addTikus);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 }
